@@ -2,10 +2,12 @@ package main
 
 import(
 	"fmt"
-	"github.com/gin-gonic/gin"
-	bolt "go.etcd.io/bbolt"
 	"log"
 	"net/http"
+	"os"
+
+	"github.com/gin-gonic/gin"
+	bolt "go.etcd.io/bbolt"
 )
 
 type Server struct {
@@ -49,7 +51,12 @@ func main() {
 	router.GET("/", s.new)
 	router.POST("/", s.create)
 
-	router.Run("localhost:8080")
+	PORT := os.Getenv("PORT")
+	if PORT == "" {
+		PORT = "8080"
+	}
+
+	router.Run(":" + PORT)
 }
 
 func (s *Server) redirect(c *gin.Context) {
