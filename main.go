@@ -70,8 +70,12 @@ func (s *Server) redirect(c *gin.Context) {
 		log.Fatal(err)
 	}
 
+	if !strings.HasPrefix("http", redir) {
+		redir = "https://" + redir
+	}
+
 	if redir != "" {
-		c.Redirect(http.StatusSeeOther, "https://" + redir)
+		c.Redirect(http.StatusSeeOther, redir)
 	} else {
 		//output := fmt.Sprintf("%s does not exist", redir)
 		c.HTML(http.StatusOK, "index.html", "index.html")
